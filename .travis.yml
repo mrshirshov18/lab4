@@ -1,0 +1,15 @@
+language: cpp
+sudo: false
+compiler:
+  - gcc
+before_script:
+  - mkdir ../build
+  - cd ../build
+script:
+  - cmake ../mp2-lab3-postfix/Сысоев
+  - make -j
+  - cd ./base_test/
+  - ls -la
+  - ./postfix_test
+notifications:
+  email: false
