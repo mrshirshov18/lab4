@@ -81,12 +81,12 @@ TEST(TPostfix, can_get_infix)
 TEST(TPostfix, can_get_postfix)
 {
     TPostfix expression("12*((3+4*5)-7)");
-    EXPECT_EQ(" 12 3 4 5 * + 7 - *", expression.GetPostfix());
+    EXPECT_EQ("12 3 4 5 * + 7 - * ", expression.GetPostfix());
 }
 TEST(TPostfix, can_get_postfix_2)
 {
     TPostfix expression("2*x+3");
-    EXPECT_EQ(" 2 x * 3 +", expression.GetPostfix());
+    EXPECT_EQ("2 x * 3 + ", expression.GetPostfix());
 }
 
 
