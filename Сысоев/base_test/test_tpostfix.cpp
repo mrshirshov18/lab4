@@ -109,4 +109,48 @@ TEST(TPostfix, can_calculate_expression_with_numbers_and_variables)
 
     EXPECT_EQ(expected, result);
 }
-
+TEST(TPostfix, can_calculate_expression_with_sin)
+{
+    double precision = 0.001;
+    TPostfix expression("1+sin(2)");
+    ostream output(nullptr);
+    double result = expression.Calculate(cin, output);
+    double expected = 1 + sin(2);
+    EXPECT_TRUE((abs(expected-result)< precision));
+}
+TEST(TPostfix, can_calculate_expression_with_cos)
+{
+    double precision = 0.001;
+    TPostfix expression("cos(5)*3");
+    ostream output(nullptr);
+    double result = expression.Calculate(cin, output);
+    double expected = cos(5) * 3;
+    EXPECT_TRUE((abs(expected - result) < precision));
+}
+TEST(TPostfix, can_calculate_expression_with_sin_and_cos)
+{
+    double precision = 0.001;
+    TPostfix expression("1+sin(2)+cos(3)*2");
+    ostream output(nullptr);
+    double result = expression.Calculate(cin, output);
+    double expected = 1 + sin(2) + cos(3) * 2;
+    EXPECT_TRUE((abs(expected - result) < precision));
+}
+TEST(TPostfix, can_calculate_expression_with_log)
+{
+    double precision = 0.001;
+    TPostfix expression("log(5)/4");
+    ostream output(nullptr);
+    double result = expression.Calculate(cin, output);
+    double expected = log(5) / 4;
+    EXPECT_TRUE((abs(expected - result) < precision));
+}
+TEST(TPostfix, can_calculate_expression_with_log_sin_cos)
+{
+    double precision = 0.001;
+    TPostfix expression("5+log(10)*4+sin(7)+cos(2)*3-2");
+    ostream output(nullptr);
+    double result = expression.Calculate(cin, output);
+    double expected = 5 + log(10) * 4 + sin(7) + cos(2)*3 - 2;
+    EXPECT_TRUE((abs(expected - result) < precision));
+}

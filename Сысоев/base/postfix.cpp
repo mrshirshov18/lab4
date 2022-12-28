@@ -48,12 +48,12 @@ void TPostfix::Parse() {
     int bracket_for_func;
     string name_variable;
     for (int i = 0; i < input_expression.size(); i++) {
-        prev_type = type;
         char c = input_expression[i];
         if (c == ' ')
             continue;
         switch (type) {
         case (nothing):
+            prev_type = type;
             // начало выражения
             if (isOperator_open(c)) {
                 left = i;
@@ -73,6 +73,7 @@ void TPostfix::Parse() {
             }
             break;
         case (number):
+            prev_type = type;
             if ((isPoint(c)) & (isPoint(input_expression[i - 1])))//две точки подряд нельзя
                 throw invalid_argument("Invalid expression");
             if ((isPoint(c) & (!isMinus(input_expression[i - 1]))) || isNumber(c))
@@ -91,10 +92,12 @@ void TPostfix::Parse() {
             }
             break;
         case (variable):
-            if (isLetter(c))
+            if (isLetter(c) && prev_type != func)
                 continue;
             name_variable = input_expression.substr(left, i - left);
-            
+
+            prev_type = type;
+
             if (isOperator_close(c)) {
                 left = i;
                 type = operator_close;
@@ -104,7 +107,7 @@ void TPostfix::Parse() {
             }
             else if (isOperation(c)) {
                 if (i != left) {
-                    infix.emplace_back(variable, input_expression.substr(left, i - left));
+                    infix.emplace_back(variable, name_variable);
                     operands.insert({ name_variable, 0.0 });
                 }
                 left = i;
@@ -131,6 +134,7 @@ void TPostfix::Parse() {
             }
             break;
         case (operation):
+            prev_type = type;
             infix.emplace_back(operation, input_expression.substr(left, i - left));
             if (isOperator_open(c)) {
                 left = i;
@@ -149,6 +153,7 @@ void TPostfix::Parse() {
             }
             break;
         case (operator_open):
+            prev_type = type;
             brackets++;
             infix.emplace_back(operator_open, input_expression.substr(left, i - left));
             if (isOperator_open(c)) {
@@ -168,6 +173,7 @@ void TPostfix::Parse() {
             }
             break;
         case (operator_close):
+            prev_type = type;
             brackets--;
             infix.emplace_back(operator_close, input_expression.substr(left, i - left));
             if (isOperator_close(c)) {
@@ -192,11 +198,11 @@ void TPostfix::Parse() {
             if (bracket_for_func == 0) {
                 expressions.back().second = TPostfix(input_expression.substr(start_arg, i - start_arg));
                 left = i + 1;
+                prev_type = type;
                 type = variable;
-                prev_type = func;
             }
             break;
-        }   
+        }
     }
 
     if (prev_type!=func)
@@ -213,7 +219,7 @@ void TPostfix::Parse() {
 
     if (brackets != 0)
         throw invalid_argument("Invalid expression: troubles with brackets");
-    if ((type != operator_close && type != number && type != variable && type != func)) {
+    if ((type != operator_close && type != number && type != variable && prev_type != func)) {
         throw invalid_argument("Invalid expression: invalid ending");
     }
 
