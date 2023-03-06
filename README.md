@@ -1,4 +1,6 @@
-﻿# Методы программирования 2: Вычисление арифметических выражений
+﻿
+ https://www.youtube.com/watch?v=OqJf1Qv6-1w
+ # Методы программирования 2: Вычисление арифметических выражений
 
 ![Build Status](https://travis-ci.org/alvls/mp2-lab3-postfix.svg)
 
